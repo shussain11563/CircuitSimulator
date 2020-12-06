@@ -167,14 +167,15 @@ int main(int argc, char* argv[])
 {
     FILE* fp = fopen(argv[1], "r");
 
-    Node* output = NULL;
-    Node* tempVar = NULL;
+    Node* inputLL = NULL;
+    Node* outputLL = NULL;
+    Node* tempVarLL = NULL;
 
     char line[100] = "";
     char argument[25] = "";
     int rows = 0;
     int cols = 0;
-    int** truthTable = NULL;
+    //int** truthTable = NULL;
     int inputVar = 0;
     int outputVar = 0;
 
@@ -184,6 +185,7 @@ int main(int argc, char* argv[])
         char testArgument[25] = ""; 
         sscanf(line, "%s %i", testArgument, &inputVar);
         rows = exponent(inputVar);
+        inputLL = parseCreateInput(inputLL, line);
     }
 
     fgets(line, 100,fp);
@@ -192,7 +194,7 @@ int main(int argc, char* argv[])
         char testArgument[25] = ""; 
         sscanf(line, "%s %i", testArgument, &outputVar);
         cols = inputVar+outputVar;
-
+        outputLL = parseCreateInput(outputLL, line);
 /*
         truthTable = malloc(rows*sizeof(int*));
         for(int i = 0; i < rows; i++)
@@ -203,6 +205,8 @@ int main(int argc, char* argv[])
     }
 
     rewind(fp);
+
+    //WE CREATED OUTPUTS *EXPERIMENT* TEST BY RUNNING
     
     while(fgets(line, 100,fp)!=NULL)
     {
