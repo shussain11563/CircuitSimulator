@@ -99,6 +99,11 @@ void not(char* currLine)
     sscanf(currLine, "%s %s %s", tempCommand, inputFirst,  output);
 }
 
+void getValue(int* inputFirstVal, int* inputSecVal, char* inputFirst, char* inputSec)
+{
+    
+}
+
 void functions(char* currLine)
 {
     char tempCommand[20]; 
@@ -112,28 +117,27 @@ void functions(char* currLine)
     int inputFirstVal = 0;
     int inputSecVal = 0;
 
-    if(strcmp(argument, "INPUTVAR")==0)
+    
+  
+    if(strcmp(tempCommand, "AND")==0)
     {
-        if(strcmp(argument, "AND")==0)
-        {
 
-        }
-        else if(strcmp(argument, "OR")==0)
-        {
+    }
+    else if(strcmp(tempCommand, "OR")==0)
+    {
             
-        }
-        else if(strcmp(argument, "NAND")==0)
-        {
+    }
+    else if(strcmp(tempCommand, "NAND")==0)
+    {
             
-        }
-        else if(strcmp(argument, "NOR")==0)
-        {
+    }
+    else if(strcmp(tempCommand, "NOR")==0)
+    {
             
-        }
-        else if(strcmp(argument, "XOR")==0)
-        {
+    }
+    else if(strcmp(tempCommand, "XOR")==0)
+    {
             
-        }
     }
 
 }
@@ -207,6 +211,32 @@ int main(int argc, char* argv[])
     rewind(fp);
 
     //WE CREATED OUTPUTS *EXPERIMENT* TEST BY RUNNING
+
+    for(int currRow = 0; currRow < rows; currRow++)
+    {
+        //rewind(fp);
+        populateBit(currRow, inputVar,inputLL);
+        while(fgets(line, 100,fp)!=NULL)
+        {
+            if(strcmp(argument, "INPUTVAR")==0)
+            {
+                continue;
+            }
+            else if(strcmp(argument, "OUTPUTVAR")==0)
+            {
+                continue;
+            }
+            else if(strcmp(argument, "NOT")==0)
+            {
+                //invoke not function
+            }
+            else if(strcmp(argument, "OR")==0 || strcmp(argument, "AND")==0 || strcmp(argument, "NAND")==0 || strcmp(argument, "NOR")==0 || strcmp(argument, "XOR")==0)
+            {
+                //invoke function
+            }
+        }
+        
+    }
     
     while(fgets(line, 100,fp)!=NULL)
     {
