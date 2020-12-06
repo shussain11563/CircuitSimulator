@@ -5,16 +5,53 @@
 typedef struct Node
 {
     int data;
+    int index;
     char varName[50];
     struct Node* next;
 
 } Node;
 
-Node* insert(Node* head, char* name, int data)
+/*
+Node* change(Node* head, int data)
+{
+    Node* ptr = head;
+
+
+
+
+    /*
+    insertedNode ->data = data;
+    insertedNode->next = NULL;
+    strcpy(insertedNode->varName, name);
+    
+    if(head==NULL)
+    {
+        return insertedNode;
+    }
+
+    Node* ptr = head;
+    while(ptr!=NULL)
+    {
+        ptr = ptr->next;
+        
+        if(ptr == NULL)
+        {
+            ptr->next = insertedNode;
+            return head;
+        }
+    }
+    
+
+}
+*/
+
+
+Node* insert(Node* head, char* name, int data, int index)
 {
     Node* insertedNode = (Node*) malloc(sizeof(Node));
     insertedNode ->data = data;
     insertedNode->next = NULL;
+    insertedNode->index = index;
     strcpy(insertedNode->varName, name);
     
     if(head==NULL)
@@ -41,21 +78,20 @@ int exponent(int power)
     return 1 << power;
 }
 
-void populateBit(int row, int inputVar, int** arr)
+void populateBit(int currRow, int inputVar, Node* inputLL)
 {
-    for(int i = 0; i < row; i++)
-    {
-        int value = i;
-        int counter = inputVar;
-        for(int j = 0; j < inputVar; j++)
-        {   
-            counter--;
-            arr[i][j] = (value >> counter) & 1;
-        }
+    Node* ptr = inputLL;
+    int counter = inputVar;
+    for(int j = 0; j < inputVar; j++)
+    {   
+        counter--;
+        ptr->data = (currRow >> counter) & 1;
+        ptr = ptr->next;
     }
+    return inputLL;
 }
 
-void not(char* currLine, )
+void not(char* currLine)
 {
     char tempCommand[20]; 
     char inputFirst[50]; 
@@ -103,6 +139,29 @@ void functions(char* currLine)
 }
 
 //int** arr = NULL;
+//creates a linked list for the inputs
+Node* parseCreateInput(Node* head, char* line)
+{
+    char testArgument[25] = ""; 
+    char nameNew[100];
+    strcpy(nameNew, line);
+    int inputVar = 0;
+    sscanf(nameNew, "%s %i", testArgument, &inputVar);
+
+    char *token;
+    token = strtok(nameNew, " ");
+    token = strtok(NULL, " ");
+
+    int i = 0;
+    for(int i =0; i <inputVar; i++)
+    {
+        char temp[25] = "";
+        token = strtok(NULL, " ");
+        strcmp(temp, token);
+        head = insert(head, temp, -1, i);
+    }
+    return head;
+}
 
 int main(int argc, char* argv[])
 {
@@ -122,7 +181,6 @@ int main(int argc, char* argv[])
     fgets(line, 100,fp);
     if(strcmp(argument, "INPUTVAR")==0)
     {
-       
         char testArgument[25] = ""; 
         sscanf(line, "%s %i", testArgument, &inputVar);
         rows = exponent(inputVar);
@@ -135,14 +193,16 @@ int main(int argc, char* argv[])
         sscanf(line, "%s %i", testArgument, &outputVar);
         cols = inputVar+outputVar;
 
+/*
         truthTable = malloc(rows*sizeof(int*));
         for(int i = 0; i < rows; i++)
         {
             truthTable[i] = malloc(cols*sizeof(int));
         }
+        */
     }
 
-    //
+    rewind(fp);
     
     while(fgets(line, 100,fp)!=NULL)
     {

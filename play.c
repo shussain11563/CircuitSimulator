@@ -9,18 +9,17 @@ int exponent(int power)
     return 1 << power;
 }
 
-void populateBit(int row, int inputVar, int** arr)
+void populateBit(int currRow, int inputVar)
 {
-    for(int i = 0; i < row; i++)
-    {
-        int value = i;
-        int counter = inputVar;
-        for(int j = 0; j < inputVar; j++)
-        {   
-            counter--;
-            arr[i][j] = (value >> counter) & 1;
-        }
+    int value = currRow;
+    int counter = inputVar;
+    for(int j = 0; j < inputVar; j++)
+    {   
+        counter--;
+        int q = (value >> counter) & 1;
+        printf("%i ", q);
     }
+    printf("\n");
 }
 
 //output variable
@@ -65,7 +64,7 @@ void parseInput(char* name)
 
 int main(int argc, char* argv[])
 {
-    //populateBit(8, 3);
-    char name[100] =  "INPUTVAR 3 IN1 IN2 IN3";
-    parseLine(name);
+    //populateBit(7, 3);
+    char name[100] =  "OUTPUTVAR 1 OUT1";
+    parseInput(name);
 }
