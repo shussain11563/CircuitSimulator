@@ -41,24 +41,64 @@ int exponent(int power)
     return 1 << power;
 }
 
-void populateBit(int row, int inputVar, int** truthTable)
+void populateBit(int row, int inputVar, int** arr)
 {
-    //int value = row;
-    /*
-               unsigned short value = ((x >> parameterOne) & 1) ;
-            printf("%hu\n", value);
-
-    */
     for(int i = 0; i < row; i++)
     {
         int value = i;
         int counter = inputVar;
         for(int j = 0; j < inputVar; j++)
-        {
-            truthTable[i][j] 
+        {   
+            counter--;
+            arr[i][j] = (value >> counter) & 1;
         }
     }
-    //
+}
+
+void not(char* currLine, )
+{
+    char tempCommand[20]; 
+    char inputFirst[50]; 
+    char output[50];
+    sscanf(currLine, "%s %s %s", tempCommand, inputFirst,  output);
+}
+
+void functions(char* currLine)
+{
+    char tempCommand[20]; 
+    char inputFirst[50]; 
+    char inputSec[50];
+    char output[50];
+    //int x = 0;
+    //int y = 0;
+    sscanf(currLine, "%s %s %s %s", tempCommand, inputFirst, inputSec, output);
+
+    int inputFirstVal = 0;
+    int inputSecVal = 0;
+
+    if(strcmp(argument, "INPUTVAR")==0)
+    {
+        if(strcmp(argument, "AND")==0)
+        {
+
+        }
+        else if(strcmp(argument, "OR")==0)
+        {
+            
+        }
+        else if(strcmp(argument, "NAND")==0)
+        {
+            
+        }
+        else if(strcmp(argument, "NOR")==0)
+        {
+            
+        }
+        else if(strcmp(argument, "XOR")==0)
+        {
+            
+        }
+    }
 
 }
 
@@ -67,19 +107,43 @@ void populateBit(int row, int inputVar, int** truthTable)
 int main(int argc, char* argv[])
 {
     FILE* fp = fopen(argv[1], "r");
-    
+
+    Node* output = NULL;
+    Node* tempVar = NULL;
+
     char line[100] = "";
     char argument[25] = "";
     int rows = 0;
     int cols = 0;
     int** truthTable = NULL;
+    int inputVar = 0;
+    int outputVar = 0;
 
-    Node* output = NULL;
-    Node* tempVar = NULL;
+    fgets(line, 100,fp);
+    if(strcmp(argument, "INPUTVAR")==0)
+    {
+       
+        char testArgument[25] = ""; 
+        sscanf(line, "%s %i", testArgument, &inputVar);
+        rows = exponent(inputVar);
+    }
 
-    //fgets(line, 100,fp);
+    fgets(line, 100,fp);
+    if(strcmp(argument, "OUTPUTVAR")==0)
+    {
+        char testArgument[25] = ""; 
+        sscanf(line, "%s %i", testArgument, &outputVar);
+        cols = inputVar+outputVar;
+
+        truthTable = malloc(rows*sizeof(int*));
+        for(int i = 0; i < rows; i++)
+        {
+            truthTable[i] = malloc(cols*sizeof(int));
+        }
+    }
+
+    //
     
-
     while(fgets(line, 100,fp)!=NULL)
     {
         sscanf(line, "%s", argument);
@@ -87,20 +151,6 @@ int main(int argc, char* argv[])
         //remove this from loop
         if(strcmp(argument, "INPUTVAR")==0)
         {
-            //make sure im not mallocing multiple times;
-            int inputVariables = 0;
-            sscanf(line, "%s %i", argument, &inputVariables);
-            rows = exponent(inputVariables);
-            cols = inputVariables+1;
-
-            truthTable = malloc(rows*sizeof(int*));
-            for(int i = 0; i < rows; i++)
-            {
-                truthTable[i] = malloc(cols*sizeof(int));
-            }
-
-            //change output size???
-            //cols = inputVariables+1;
 
         }
         else if(strcmp(argument, "OUTPUTVAR")==0)
