@@ -34,7 +34,6 @@ Node* insert(Node* head, char* name, int data)
         }
     }
 
-    //else attach
 }
 
 int exponent(int power)
@@ -42,7 +41,29 @@ int exponent(int power)
     return 1 << power;
 }
 
-int** arr = NULL;
+void populateBit(int row, int inputVar, int** truthTable)
+{
+    //int value = row;
+    /*
+               unsigned short value = ((x >> parameterOne) & 1) ;
+            printf("%hu\n", value);
+
+    */
+    for(int i = 0; i < row; i++)
+    {
+        int value = i;
+        int counter = inputVar;
+        for(int j = 0; j < inputVar; j++)
+        {
+            truthTable[i][j] 
+        }
+    }
+    //
+    
+
+}
+
+//int** arr = NULL;
 
 int main(int argc, char* argv[])
 {
@@ -53,6 +74,10 @@ int main(int argc, char* argv[])
     int rows = 0;
     int cols = 0;
     int** truthTable = NULL;
+
+    Node* output = NULL;
+    Node* tempVar = NULL;
+
     //fgets(line, 100,fp);
     
 
