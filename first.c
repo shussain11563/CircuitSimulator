@@ -59,7 +59,6 @@ void populateBit(int row, int inputVar, int** truthTable)
         }
     }
     //
-    
 
 }
 

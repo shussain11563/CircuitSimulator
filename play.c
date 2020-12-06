@@ -30,8 +30,29 @@ void populateBit(int row, int inputVar)
 
 }
 
+//output variable
+//int isTempVariable()
+void output(char* name)
+{
+    char c = name[0];
+    if(c >= 'A' && c <= 'Z') 
+    {
+        printf("OUTPUT VARIABLE \n");
+    }
+    else if(c >= 'a' && c <= 'z') 
+    {
+        printf("temp variable \n");
+    }
+    //else if nummber
+    //else special character like null character, end program/break program
+    //else if()
+
+}
+
 
 int main(int argc, char* argv[])
 {
-    populateBit(8, 3);
+    //populateBit(8, 3);
+    char name[50] =  "1TEst1";
+    output(name);
 }
