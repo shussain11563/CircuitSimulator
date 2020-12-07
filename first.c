@@ -293,14 +293,17 @@ int main(int argc, char* argv[])
                 //EXPERIMENT
                 //printLL(outputLL);
                 outputDetermination(outputName, outputLL, tempVarLL, outputRet);
+
+                
                 //printLL(outputLL);
-                //printf("%s \n",outputName);
+                //printf("%d %s %d\n", currRow, outputName, outputRet);
                 //sscanf()
             
             }
         }
-        printLL(inputLL);
-        printLL(outputLL);
+        //printLL(inputLL);
+        printf("Curr Row : %d \n", currRow);
+        printLL(tempVarLL);
         freeMemory(tempVarLL);
         tempVarLL = NULL;
         printf("\n");
