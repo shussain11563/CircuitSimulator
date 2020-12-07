@@ -99,12 +99,36 @@ void not(char* currLine)
     sscanf(currLine, "%s %s %s", tempCommand, inputFirst,  output);
 }
 
-void getValue(int* inputFirstVal, int* inputSecVal, char* inputFirst, char* inputSec)
+void getValue(int* inputFirstVal, int* inputSecVal, char* inputFirst, char* inputSec, Node* inputLL)
 {
+    Node* ptr = inputLL;
+
+    short successF = 0;
+    short successS = 0;
+
+    while(ptr!=NULL)
+    {
+        if(strcmp(ptr->varName, inputFirst))
+        {
+            *inputFirstVal = ptr->data;
+            successF = 1;
+        }
+        else if(strcmp(ptr->varName, inputSec))
+        {
+            *inputSecVal = ptr->data;
+            successS = 1;
+        }
+
+        if(successS && successF ==1)
+        {
+            break;
+        }
+    }
+    
     
 }
 
-void functions(char* currLine)
+void functions(char* currLine, Node** head)
 {
     char tempCommand[20]; 
     char inputFirst[50]; 
