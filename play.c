@@ -45,18 +45,19 @@ void parseInput(char* name)
 {
     char testArgument[25] = ""; 
     char nameNew[100];
+    //char* delimiters = " \n\t\0";
     strcpy(nameNew, name);
     int inputVar = 0;
     sscanf(name, "%s %i", testArgument, &inputVar);
-
+    char* delimiters = " \n\t\0";
     char *token;
-    token = strtok(nameNew, " ");
-    token = strtok(NULL, " ");
+    token = strtok(nameNew, delimiters);
+    token = strtok(NULL, delimiters);
 
     int i = 0;
     for(int i =0; i <inputVar; i++)
     {
-        token = strtok(NULL, " ");
+        token = strtok(NULL, delimiters);
         printf( "%s\n", token );
     }
 }
@@ -65,6 +66,6 @@ void parseInput(char* name)
 int main(int argc, char* argv[])
 {
     //populateBit(7, 3);
-    char name[100] =  "OUTPUTVAR 1 OUT1";
+    char name[100] =  "INPUTVAR 3 IN1 IN2 IN3";
     parseInput(name);
 }

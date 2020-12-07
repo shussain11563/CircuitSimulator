@@ -45,6 +45,18 @@ int exponent(int power)
     return 1 << power;
 }
 
+void freeMemory(Node* head)
+{
+    Node* prev = NULL;
+    Node* ptr = head;
+    while(ptr!=NULL)
+    {
+        prev = ptr;
+        ptr = ptr->next;
+        free(prev);
+    }
+}
+
 Node* populateBit(int currRow, int inputVar, Node* inputLL)
 {
     Node* ptr = inputLL;
@@ -85,6 +97,7 @@ void getValue(int* inputVal, char* inputName,  Node* inputLL, Node* tempLL)
             *inputVal = ptr->data;
             return;
         }
+        ptr = ptr->next;
     }
     
 }
@@ -177,18 +190,19 @@ Node* parseCreateInput(Node* head, char* line)
     char nameNew[100] = " ";
     strcpy(nameNew, line);
     int inputVar = 0;
+    char* delimiters = " \n\t\0";
     sscanf(nameNew, "%s %i", testArgument, &inputVar);
 
     char *token;
-    token = strtok(nameNew, " ");
-    token = strtok(NULL, " ");
-
+    token = strtok(nameNew, delimiters);
+    token = strtok(NULL, delimiters);
+    
     int i = 0;
     for(int i =0; i <inputVar; i++)
     {
         char temp[25] = "";
-        token = strtok(NULL, " ");
-        strcmp(temp, token);
+        token = strtok(NULL, delimiters);
+        strcpy(temp, token);
         head = insert(head, temp, -1, i);
     }
     return head;
@@ -197,6 +211,7 @@ Node* parseCreateInput(Node* head, char* line)
 void printLL(Node* head)
 {
     Node* ptr = head;
+    int counter = 0;
     while(ptr!=NULL)
     {
         printf("%d ", ptr->data);
@@ -233,6 +248,7 @@ int main(int argc, char* argv[])
         inputLL = parseCreateInput(inputLL, line);
     }
 
+
     fgets(line, 100,fp);
     sscanf(line, "%s", argument);
     if(strcmp(argument, "OUTPUTVAR")==0)
@@ -242,6 +258,7 @@ int main(int argc, char* argv[])
         cols = inputVar+outputVar;
         outputLL = parseCreateInput(outputLL, line);
     }
+    //printLL(outputLL);
 
     //rewind(fp);
     
@@ -271,9 +288,12 @@ int main(int argc, char* argv[])
             else if(strcmp(argument, "OR")==0 || strcmp(argument, "AND")==0 || strcmp(argument, "NAND")==0 || strcmp(argument, "NOR")==0 || strcmp(argument, "XOR")==0)
             {
                 char outputName[30] = " ";
+                //printLL(outputLL);
                 int outputRet = returnOutput(line, inputLL, tempVarLL, outputName);
                 //EXPERIMENT
+                //printLL(outputLL);
                 outputDetermination(outputName, outputLL, tempVarLL, outputRet);
+                //printLL(outputLL);
                 //printf("%s \n",outputName);
                 //sscanf()
             
@@ -281,8 +301,12 @@ int main(int argc, char* argv[])
         }
         printLL(inputLL);
         printLL(outputLL);
+        freeMemory(tempVarLL);
+        tempVarLL = NULL;
         printf("\n");
         
+
+        
     }
-    
+    fclose(fp);
 }
