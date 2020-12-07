@@ -89,7 +89,7 @@ void getValue(int* inputVal, char* inputName,  Node* inputLL, Node* tempLL)
     
 }
 
-int returnOutput(char* currLine, Node* inputLL, Node* tempLL)
+int returnOutput(char* currLine, Node* inputLL, Node* tempLL, char* outputName)
 {
     char tempCommand[20]; 
     char inputFirst[50]; 
@@ -98,6 +98,7 @@ int returnOutput(char* currLine, Node* inputLL, Node* tempLL)
     //int x = 0;
     //int y = 0;
     sscanf(currLine, "%s %s %s %s", tempCommand, inputFirst, inputSec, output);
+    strcpy(outputName, output);
 
     int inputFirstVal = 0;
     int inputSecVal = 0;
@@ -131,7 +132,7 @@ int returnOutput(char* currLine, Node* inputLL, Node* tempLL)
     return outputVal;
 }
 
-void outputDetermination(char* name, Node* output, Node* temp, int outputVal)
+void outputDetermination(char* name, Node* outputLL, Node* tempLL, int outputVal)
 {
     char c = name[0];
     char nameNew[30] = " ";
@@ -140,7 +141,7 @@ void outputDetermination(char* name, Node* output, Node* temp, int outputVal)
     if(c >= 'A' && c <= 'Z') 
     {
         //printf("OUTPUT VARIABLE \n");
-        Node* ptr = output;
+        Node* ptr = outputLL;
         while(ptr!=NULL)
         {
             if(strcmp(nameNew, ptr->varName)==0)
@@ -148,13 +149,15 @@ void outputDetermination(char* name, Node* output, Node* temp, int outputVal)
                 ptr->data = outputVal;
                 return;
             }
+            ptr = ptr->next;
         }
     }
     else if(c >= 'a' && c <= 'z') 
     {
         //might have to return
         //printf("temp variable \n");
-        temp = insert(temp, nameNew, outputVal, 0);
+        tempLL = insert(tempLL, nameNew, outputVal, 0);
+        
     }
     else if(isdigit(c))
     {
@@ -162,8 +165,7 @@ void outputDetermination(char* name, Node* output, Node* temp, int outputVal)
     }
     //else if nummber
     //else special character like null character, end program/break program
-    //else if()
-
+   
 }
 
 
@@ -200,7 +202,7 @@ void printLL(Node* head)
         printf("%d ", ptr->data);
         ptr = ptr->next;
     }
-    printf("\n");
+    //printf("\n");
 
 }
 
@@ -213,7 +215,7 @@ int main(int argc, char* argv[])
     Node* tempVarLL = NULL;
 
     char line[100] = "";
-    char argument[25] = "";
+    char argument[30] = "";
     int rows = 0;
     int cols = 0;
     //int** truthTable = NULL;
@@ -249,10 +251,11 @@ int main(int argc, char* argv[])
     {
         rewind(fp);
         inputLL = populateBit(currRow, inputVar,inputLL);
-        printLL(inputLL);
+        //printLL(inputLL);
 
         while(fgets(line, 100,fp)!=NULL)
         {
+            sscanf(line, "%s", argument);
             if(strcmp(argument, "INPUTVAR")==0)
             {
                 continue;
@@ -267,10 +270,18 @@ int main(int argc, char* argv[])
             }
             else if(strcmp(argument, "OR")==0 || strcmp(argument, "AND")==0 || strcmp(argument, "NAND")==0 || strcmp(argument, "NOR")==0 || strcmp(argument, "XOR")==0)
             {
-                int outputRet = returnOutput(line, inputLL, tempVarLL);
-                
+                char outputName[30] = " ";
+                int outputRet = returnOutput(line, inputLL, tempVarLL, outputName);
+                //EXPERIMENT
+                outputDetermination(outputName, outputLL, tempVarLL, outputRet);
+                //printf("%s \n",outputName);
+                //sscanf()
+            
             }
         }
+        printLL(inputLL);
+        printLL(outputLL);
+        printf("\n");
         
     }
     
