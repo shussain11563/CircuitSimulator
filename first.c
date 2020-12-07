@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <ctype.h>
 typedef struct Node
 {
     int data;
@@ -10,41 +10,6 @@ typedef struct Node
     struct Node* next;
 
 } Node;
-
-/*
-Node* change(Node* head, int data)
-{
-    Node* ptr = head;
-
-
-
-
-    /*
-    insertedNode ->data = data;
-    insertedNode->next = NULL;
-    strcpy(insertedNode->varName, name);
-    
-    if(head==NULL)
-    {
-        return insertedNode;
-    }
-
-    Node* ptr = head;
-    while(ptr!=NULL)
-    {
-        ptr = ptr->next;
-        
-        if(ptr == NULL)
-        {
-            ptr->next = insertedNode;
-            return head;
-        }
-    }
-    
-
-}
-*/
-
 
 Node* insert(Node* head, char* name, int data, int index)
 {
@@ -78,7 +43,7 @@ int exponent(int power)
     return 1 << power;
 }
 
-void populateBit(int currRow, int inputVar, Node* inputLL)
+Node* populateBit(int currRow, int inputVar, Node* inputLL)
 {
     Node* ptr = inputLL;
     int counter = inputVar;
@@ -99,36 +64,30 @@ void not(char* currLine)
     sscanf(currLine, "%s %s %s", tempCommand, inputFirst,  output);
 }
 
-void getValue(int* inputFirstVal, int* inputSecVal, char* inputFirst, char* inputSec, Node* inputLL)
+void getValue(int* inputVal, char* inputName,  Node* inputLL, Node* tempLL)
 {
-    Node* ptr = inputLL;
-
-    short successF = 0;
-    short successS = 0;
+    Node* ptr = NULL;
+    if(inputName[0] >= 'A' && inputName[0] <= 'Z')
+    {
+        ptr = inputLL;
+    }
+    else if(inputName[0] >= 'a' && inputName[0] <= 'z') 
+    {
+        ptr = tempLL;
+    }
 
     while(ptr!=NULL)
     {
-        if(strcmp(ptr->varName, inputFirst))
+        if(strcmp(ptr->varName, inputName))
         {
-            *inputFirstVal = ptr->data;
-            successF = 1;
-        }
-        else if(strcmp(ptr->varName, inputSec))
-        {
-            *inputSecVal = ptr->data;
-            successS = 1;
-        }
-
-        if(successS && successF ==1)
-        {
-            break;
+            *inputVal = ptr->data;
+            return;
         }
     }
     
-    
 }
 
-void functions(char* currLine, Node** head)
+int returnOutput(char* currLine, Node* inputLL, Node* tempLL)
 {
     char tempCommand[20]; 
     char inputFirst[50]; 
@@ -141,37 +100,77 @@ void functions(char* currLine, Node** head)
     int inputFirstVal = 0;
     int inputSecVal = 0;
 
-    
-  
+    getValue(&inputFirstVal, inputFirst, inputLL, tempLL);
+    getValue(&inputSecVal, inputSec, inputLL, tempLL);
+
+    int outputVal = 0; //change to -1 for debugging
+
     if(strcmp(tempCommand, "AND")==0)
     {
-
+        outputVal = inputFirstVal & inputSecVal;
     }
     else if(strcmp(tempCommand, "OR")==0)
     {
-            
+        outputVal = inputFirstVal | inputSecVal;
     }
     else if(strcmp(tempCommand, "NAND")==0)
     {
-            
+        outputVal = ~(inputFirstVal & inputSecVal);
     }
     else if(strcmp(tempCommand, "NOR")==0)
     {
-            
+        outputVal = ~(inputFirstVal | inputSecVal);
     }
     else if(strcmp(tempCommand, "XOR")==0)
     {
-            
+        outputVal = inputFirstVal ^ inputSecVal;
     }
 
+    return outputVal;
 }
+
+void outputDetermination(char* name, Node* output, Node* temp, int outputVal)
+{
+    char c = name[0];
+    char nameNew[30] = " ";
+    strcpy(nameNew, name);
+
+    if(c >= 'A' && c <= 'Z') 
+    {
+        //printf("OUTPUT VARIABLE \n");
+        Node* ptr = output;
+        while(ptr!=NULL)
+        {
+            if(strcmp(nameNew, ptr->varName)==0)
+            {
+                ptr->data = outputVal;
+                return;
+            }
+        }
+    }
+    else if(c >= 'a' && c <= 'z') 
+    {
+        //might have to return
+        //printf("temp variable \n");
+        temp = insert(temp, nameNew, outputVal, 0);
+    }
+    else if(isdigit(c))
+    {
+        //idk ///implement
+    }
+    //else if nummber
+    //else special character like null character, end program/break program
+    //else if()
+
+}
+
 
 //int** arr = NULL;
 //creates a linked list for the inputs
 Node* parseCreateInput(Node* head, char* line)
 {
     char testArgument[25] = ""; 
-    char nameNew[100];
+    char nameNew[100] = " ";
     strcpy(nameNew, line);
     int inputVar = 0;
     sscanf(nameNew, "%s %i", testArgument, &inputVar);
@@ -189,6 +188,19 @@ Node* parseCreateInput(Node* head, char* line)
         head = insert(head, temp, -1, i);
     }
     return head;
+}
+
+void printLL(Node* head)
+{
+    Node* ptr = head;
+    printf("HELLO \n");
+    while(ptr!=NULL)
+    {
+        printf("%d ", ptr->data);
+        ptr = ptr->next;
+    }
+    printf("\n ");
+
 }
 
 int main(int argc, char* argv[])
@@ -223,23 +235,18 @@ int main(int argc, char* argv[])
         sscanf(line, "%s %i", testArgument, &outputVar);
         cols = inputVar+outputVar;
         outputLL = parseCreateInput(outputLL, line);
-/*
-        truthTable = malloc(rows*sizeof(int*));
-        for(int i = 0; i < rows; i++)
-        {
-            truthTable[i] = malloc(cols*sizeof(int));
-        }
-        */
     }
 
-    rewind(fp);
-
+    //rewind(fp);
+    
     //WE CREATED OUTPUTS *EXPERIMENT* TEST BY RUNNING
 
     for(int currRow = 0; currRow < rows; currRow++)
     {
-        //rewind(fp);
-        populateBit(currRow, inputVar,inputLL);
+        rewind(fp);
+        inputLL = populateBit(currRow, inputVar,inputLL);
+        printLL(inputLL);
+
         while(fgets(line, 100,fp)!=NULL)
         {
             if(strcmp(argument, "INPUTVAR")==0)
@@ -252,34 +259,15 @@ int main(int argc, char* argv[])
             }
             else if(strcmp(argument, "NOT")==0)
             {
-                //invoke not function
+                //invoke not functio
             }
             else if(strcmp(argument, "OR")==0 || strcmp(argument, "AND")==0 || strcmp(argument, "NAND")==0 || strcmp(argument, "NOR")==0 || strcmp(argument, "XOR")==0)
             {
-                //invoke function
+                int outputRet = returnOutput(line, inputLL, tempVarLL);
+                
             }
         }
         
     }
     
-    while(fgets(line, 100,fp)!=NULL)
-    {
-        sscanf(line, "%s", argument);
-
-        //remove this from loop
-        if(strcmp(argument, "INPUTVAR")==0)
-        {
-
-        }
-        else if(strcmp(argument, "OUTPUTVAR")==0)
-        {
-            
-        }
-        else if(strcmp())
-        {
-
-        }
-
-        printf("%s \n", argument);
-    }
 }
