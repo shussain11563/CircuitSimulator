@@ -145,37 +145,27 @@ int returnOutput(char* currLine, Node* inputLL, Node* tempLL, char* outputName)
     return outputVal;
 }
 
-void outputDetermination(char* name, Node* outputLL, Node* tempLL, int outputVal)
+Node* storeOutputLL(char* name, Node* outputLL, int outputVal)
 {
     char c = name[0];
     char nameNew[30] = " ";
     strcpy(nameNew, name);
 
-    if(c >= 'A' && c <= 'Z') 
+    Node* ptr = outputLL;
+    while(ptr!=NULL)
     {
-        //printf("OUTPUT VARIABLE \n");
-        Node* ptr = outputLL;
-        while(ptr!=NULL)
+        if(strcmp(nameNew, ptr->varName)==0)
         {
-            if(strcmp(nameNew, ptr->varName)==0)
-            {
-                ptr->data = outputVal;
-                return;
-            }
-            ptr = ptr->next;
+            ptr->data = outputVal;
+            return outputLL;
         }
+        ptr = ptr->next;
     }
-    else if(c >= 'a' && c <= 'z') 
-    {
-        //might have to return
-        //printf("temp variable \n");
-        tempLL = insert(tempLL, nameNew, outputVal, 0);
-        
-    }
-    else if(isdigit(c))
-    {
+    
+    //else if(isdigit(c))
+    //{
         //idk ///implement
-    }
+    //}
     //else if nummber
     //else special character like null character, end program/break program
    
@@ -292,7 +282,19 @@ int main(int argc, char* argv[])
                 int outputRet = returnOutput(line, inputLL, tempVarLL, outputName);
                 //EXPERIMENT
                 //printLL(outputLL);
-                outputDetermination(outputName, outputLL, tempVarLL, outputRet);
+                //outputDetermination(outputName, outputLL, tempVarLL, outputRet);
+
+
+                
+
+                if(outputName[0] >= 'A' && outputName[0] <= 'Z') 
+                {
+                    outputLL = storeOutputLL(outputName, outputLL, outputRet);
+                }
+                else if(outputName[0] >= 'a' && outputName[0] <= 'z') 
+                {
+                    tempVarLL = insert(tempVarLL, outputName, outputRet, 0);
+                }
 
                 
                 //printLL(outputLL);
@@ -301,9 +303,10 @@ int main(int argc, char* argv[])
             
             }
         }
-        //printLL(inputLL);
-        printf("Curr Row : %d \n", currRow);
-        printLL(tempVarLL);
+        printLL(inputLL);
+        printLL(outputLL);
+        //printf("Curr Row : %d \n", currRow);
+        //printLL(tempVarLL);
         freeMemory(tempVarLL);
         tempVarLL = NULL;
         printf("\n");
