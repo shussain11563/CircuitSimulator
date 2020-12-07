@@ -24,14 +24,16 @@ Node* insert(Node* head, char* name, int data, int index)
         return insertedNode;
     }
 
+    Node* prev = NULL;
     Node* ptr = head;
     while(ptr!=NULL)
     {
+        prev = ptr;
         ptr = ptr->next;
         
         if(ptr == NULL)
         {
-            ptr->next = insertedNode;
+            prev->next = insertedNode;
             return head;
         }
     }
@@ -193,13 +195,12 @@ Node* parseCreateInput(Node* head, char* line)
 void printLL(Node* head)
 {
     Node* ptr = head;
-    printf("HELLO \n");
     while(ptr!=NULL)
     {
         printf("%d ", ptr->data);
         ptr = ptr->next;
     }
-    printf("\n ");
+    printf("\n");
 
 }
 
@@ -220,6 +221,8 @@ int main(int argc, char* argv[])
     int outputVar = 0;
 
     fgets(line, 100,fp);
+
+    sscanf(line, "%s", argument);
     if(strcmp(argument, "INPUTVAR")==0)
     {
         char testArgument[25] = ""; 
@@ -229,6 +232,7 @@ int main(int argc, char* argv[])
     }
 
     fgets(line, 100,fp);
+    sscanf(line, "%s", argument);
     if(strcmp(argument, "OUTPUTVAR")==0)
     {
         char testArgument[25] = ""; 
