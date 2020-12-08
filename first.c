@@ -70,13 +70,6 @@ Node* populateBit(int currRow, int inputVar, Node* inputLL)
     return inputLL;
 }
 
-void not(char* currLine)
-{
-    char tempCommand[20]; 
-    char inputFirst[50]; 
-    char output[50];
-    sscanf(currLine, "%s %s %s", tempCommand, inputFirst,  output);
-}
 
 void getValue(int* inputVal, char* inputName,  Node* inputLL, Node* tempLL)
 {
@@ -90,19 +83,39 @@ void getValue(int* inputVal, char* inputName,  Node* inputLL, Node* tempLL)
         ptr = tempLL;
     }
 
-
-
     while(ptr!=NULL)
     {
         if(strcmp(ptr->varName, inputName)==0)
         {
             *inputVal = ptr->data;
-            //printf()
+            
             return;
         }
         ptr = ptr->next;
     }
     
+}
+int not(char* currLine, Node* inputLL, Node* tempLL, char* outputName)
+{
+    char tempCommand[20]; 
+    char inputFirst[50]; 
+    char output[50];
+ 
+    sscanf(currLine, "%s %s %s", tempCommand, inputFirst, output);
+    strcpy(outputName, output);
+
+    int inputFirstVal = 0;
+
+    getValue(&inputFirstVal, inputFirst, inputLL, tempLL);
+
+    int outputVal = 0;
+    if(strcmp(tempCommand, "NOT")==0)
+    {
+        outputVal = !inputFirstVal;
+    }
+
+    return outputVal;   
+
 }
 
 int returnOutput(char* currLine, Node* inputLL, Node* tempLL, char* outputName)
@@ -136,11 +149,11 @@ int returnOutput(char* currLine, Node* inputLL, Node* tempLL, char* outputName)
     }
     else if(strcmp(tempCommand, "NAND")==0)
     {
-        outputVal = ~(inputFirstVal & inputSecVal);
+        outputVal = !(inputFirstVal & inputSecVal);
     }
     else if(strcmp(tempCommand, "NOR")==0)
     {
-        outputVal = ~(inputFirstVal | inputSecVal);
+        outputVal = !(inputFirstVal | inputSecVal);
     }
     else if(strcmp(tempCommand, "XOR")==0)
     {
@@ -270,7 +283,18 @@ int main(int argc, char* argv[])
             }
             else if(strcmp(argument, "NOT")==0)
             {
-                //invoke not functio
+                
+                char outputName[30] = " ";
+                int outputRet = not(line, inputLL, tempVarLL, outputName);
+                //printf("Curr Row : %d ---- %s = %d\n", currRow, outputName, outputRet);
+                if(outputName[0] >= 'A' && outputName[0] <= 'Z') 
+                {
+                    outputLL = storeOutputLL(outputName, outputLL, outputRet);
+                }
+                else if(outputName[0] >= 'a' && outputName[0] <= 'z') 
+                {
+                    tempVarLL = insert(tempVarLL, outputName, outputRet, 0);
+                }
             }
             else if(strcmp(argument, "OR")==0 || strcmp(argument, "AND")==0 || strcmp(argument, "NAND")==0 || strcmp(argument, "NOR")==0 || strcmp(argument, "XOR")==0)
             {
@@ -282,10 +306,7 @@ int main(int argc, char* argv[])
                 //outputDetermination(outputName, outputLL, tempVarLL, outputRet);
                 //printLL(inputLL);
                 //printf("Curr Row : %d ---- %s = %d\n", currRow, outputName, outputRet);
-                
-
-                
-
+            
                 if(outputName[0] >= 'A' && outputName[0] <= 'Z') 
                 {
                     outputLL = storeOutputLL(outputName, outputLL, outputRet);
