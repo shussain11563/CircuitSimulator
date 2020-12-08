@@ -108,8 +108,7 @@ int returnOutput(char* currLine, Node* inputLL, Node* tempLL, char* outputName)
     char inputFirst[50]; 
     char inputSec[50];
     char output[50];
-    //int x = 0;
-    //int y = 0;
+ 
     sscanf(currLine, "%s %s %s %s", tempCommand, inputFirst, inputSec, output);
     strcpy(outputName, output);
 
@@ -120,6 +119,9 @@ int returnOutput(char* currLine, Node* inputLL, Node* tempLL, char* outputName)
     getValue(&inputSecVal, inputSec, inputLL, tempLL);
 
     int outputVal = 0; //change to -1 for debugging
+
+    printf("Var %s and value %d:\n", inputFirst ,inputFirstVal);
+    printf("Var %s and value %d:\n", inputSec ,inputSecVal);
 
     if(strcmp(tempCommand, "AND")==0)
     {
@@ -283,7 +285,9 @@ int main(int argc, char* argv[])
                 //EXPERIMENT
                 //printLL(outputLL);
                 //outputDetermination(outputName, outputLL, tempVarLL, outputRet);
-
+                printLL(inputLL);
+                printf("Curr Row : %d ---- %s = %d\n", currRow, outputName, outputRet);
+                
 
                 
 
@@ -303,8 +307,8 @@ int main(int argc, char* argv[])
             
             }
         }
-        printLL(inputLL);
-        printLL(outputLL);
+        //printLL(inputLL);
+        //printLL(outputLL);
         //printf("Curr Row : %d \n", currRow);
         //printLL(tempVarLL);
         freeMemory(tempVarLL);
