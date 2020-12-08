@@ -8,7 +8,6 @@ typedef struct Node
     int index;
     char varName[50];
     struct Node* next;
-
 } Node;
 
 Node* insert(Node* head, char* name, int data, int index)
@@ -70,7 +69,6 @@ Node* populateBit(int currRow, int inputVar, Node* inputLL)
     return inputLL;
 }
 
-
 void getValue(int* inputVal, char* inputName,  Node* inputLL, Node* tempLL)
 {
     Node* ptr = NULL;
@@ -82,13 +80,11 @@ void getValue(int* inputVal, char* inputName,  Node* inputLL, Node* tempLL)
     {
         ptr = tempLL;
     }
-
     while(ptr!=NULL)
     {
         if(strcmp(ptr->varName, inputName)==0)
         {
             *inputVal = ptr->data;
-            
             return;
         }
         ptr = ptr->next;
@@ -105,7 +101,6 @@ int not(char* currLine, Node* inputLL, Node* tempLL, char* outputName)
     strcpy(outputName, output);
 
     int inputFirstVal = 0;
-
     getValue(&inputFirstVal, inputFirst, inputLL, tempLL);
 
     int outputVal = 0;
@@ -113,9 +108,7 @@ int not(char* currLine, Node* inputLL, Node* tempLL, char* outputName)
     {
         outputVal = !inputFirstVal;
     }
-
     return outputVal;   
-
 }
 
 int returnOutput(char* currLine, Node* inputLL, Node* tempLL, char* outputName)
@@ -135,9 +128,6 @@ int returnOutput(char* currLine, Node* inputLL, Node* tempLL, char* outputName)
     getValue(&inputSecVal, inputSec, inputLL, tempLL);
 
     int outputVal = 0; //change to -1 for debugging
-
-    //printf("Var %s and value %d:\n", inputFirst ,inputFirstVal);
-    //printf("Var %s and value %d:\n", inputSec ,inputSecVal);
 
     if(strcmp(tempCommand, "AND")==0)
     {
@@ -159,7 +149,6 @@ int returnOutput(char* currLine, Node* inputLL, Node* tempLL, char* outputName)
     {
         outputVal = inputFirstVal ^ inputSecVal;
     }
-
     return outputVal;
 }
 
@@ -167,7 +156,6 @@ Node* storeOutputLL(char* name, Node* outputLL, int outputVal)
 {
     char nameNew[30] = " ";
     strcpy(nameNew, name);
-
     Node* ptr = outputLL;
     while(ptr!=NULL)
     {
@@ -178,13 +166,8 @@ Node* storeOutputLL(char* name, Node* outputLL, int outputVal)
         }
         ptr = ptr->next;
     }
-    
-   
 }
 
-
-//int** arr = NULL;
-//creates a linked list for the inputs
 Node* parseCreateInput(Node* head, char* line)
 {
     char testArgument[25] = ""; 
@@ -213,12 +196,9 @@ void printLL(Node* head)
     Node* ptr = head;
     while(ptr!=NULL)
     {
-        //printf("%s %d ---->", ptr->varName, ptr->data);
         printf("%d ",ptr->data);
         ptr = ptr->next;
     }
-    //printf("\n");
-
 }
 
 int main(int argc, char* argv[])
@@ -232,13 +212,10 @@ int main(int argc, char* argv[])
     char line[100] = "";
     char argument[30] = "";
     int rows = 0;
-    int cols = 0;
-    //int** truthTable = NULL;
     int inputVar = 0;
     int outputVar = 0;
 
     fgets(line, 100,fp);
-
     sscanf(line, "%s", argument);
     if(strcmp(argument, "INPUTVAR")==0)
     {
@@ -248,27 +225,19 @@ int main(int argc, char* argv[])
         inputLL = parseCreateInput(inputLL, line);
     }
 
-
     fgets(line, 100,fp);
     sscanf(line, "%s", argument);
     if(strcmp(argument, "OUTPUTVAR")==0)
     {
         char testArgument[25] = ""; 
         sscanf(line, "%s %i", testArgument, &outputVar);
-        cols = inputVar+outputVar;
         outputLL = parseCreateInput(outputLL, line);
     }
-    //printLL(outputLL);
-
-    //rewind(fp);
-    
-    //WE CREATED OUTPUTS *EXPERIMENT* TEST BY RUNNING
 
     for(int currRow = 0; currRow < rows; currRow++)
     {
         rewind(fp);
         inputLL = populateBit(currRow, inputVar,inputLL);
-        //printLL(inputLL);
 
         while(fgets(line, 100,fp)!=NULL)
         {
@@ -282,11 +251,9 @@ int main(int argc, char* argv[])
                 continue;
             }
             else if(strcmp(argument, "NOT")==0)
-            {
-                
+            { 
                 char outputName[30] = " ";
                 int outputRet = not(line, inputLL, tempVarLL, outputName);
-                //printf("Curr Row : %d ---- %s = %d\n", currRow, outputName, outputRet);
                 if(outputName[0] >= 'A' && outputName[0] <= 'Z') 
                 {
                     outputLL = storeOutputLL(outputName, outputLL, outputRet);
@@ -299,14 +266,7 @@ int main(int argc, char* argv[])
             else if(strcmp(argument, "OR")==0 || strcmp(argument, "AND")==0 || strcmp(argument, "NAND")==0 || strcmp(argument, "NOR")==0 || strcmp(argument, "XOR")==0)
             {
                 char outputName[30] = " ";
-                //printLL(outputLL);
                 int outputRet = returnOutput(line, inputLL, tempVarLL, outputName);
-                //EXPERIMENT
-                //printLL(outputLL);
-                //outputDetermination(outputName, outputLL, tempVarLL, outputRet);
-                //printLL(inputLL);
-                //printf("Curr Row : %d ---- %s = %d\n", currRow, outputName, outputRet);
-            
                 if(outputName[0] >= 'A' && outputName[0] <= 'Z') 
                 {
                     outputLL = storeOutputLL(outputName, outputLL, outputRet);
@@ -315,18 +275,10 @@ int main(int argc, char* argv[])
                 {
                     tempVarLL = insert(tempVarLL, outputName, outputRet, 0);
                 }
-
-                
-                //printLL(outputLL);
-                //printf("%d %s %d\n", currRow, outputName, outputRet);
-                //sscanf()
-            
             }
         }
         printLL(inputLL);
         printLL(outputLL);
-        //printf("Curr Row : %d \n", currRow);
-        //printLL(tempVarLL);
         freeMemory(tempVarLL);
         tempVarLL = NULL;
         printf("\n");
