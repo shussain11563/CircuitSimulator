@@ -90,11 +90,14 @@ void getValue(int* inputVal, char* inputName,  Node* inputLL, Node* tempLL)
         ptr = tempLL;
     }
 
+
+
     while(ptr!=NULL)
     {
-        if(strcmp(ptr->varName, inputName))
+        if(strcmp(ptr->varName, inputName)==0)
         {
             *inputVal = ptr->data;
+            //printf()
             return;
         }
         ptr = ptr->next;
@@ -120,8 +123,8 @@ int returnOutput(char* currLine, Node* inputLL, Node* tempLL, char* outputName)
 
     int outputVal = 0; //change to -1 for debugging
 
-    printf("Var %s and value %d:\n", inputFirst ,inputFirstVal);
-    printf("Var %s and value %d:\n", inputSec ,inputSecVal);
+    //printf("Var %s and value %d:\n", inputFirst ,inputFirstVal);
+    //printf("Var %s and value %d:\n", inputSec ,inputSecVal);
 
     if(strcmp(tempCommand, "AND")==0)
     {
@@ -149,7 +152,6 @@ int returnOutput(char* currLine, Node* inputLL, Node* tempLL, char* outputName)
 
 Node* storeOutputLL(char* name, Node* outputLL, int outputVal)
 {
-    char c = name[0];
     char nameNew[30] = " ";
     strcpy(nameNew, name);
 
@@ -164,12 +166,6 @@ Node* storeOutputLL(char* name, Node* outputLL, int outputVal)
         ptr = ptr->next;
     }
     
-    //else if(isdigit(c))
-    //{
-        //idk ///implement
-    //}
-    //else if nummber
-    //else special character like null character, end program/break program
    
 }
 
@@ -189,7 +185,6 @@ Node* parseCreateInput(Node* head, char* line)
     token = strtok(nameNew, delimiters);
     token = strtok(NULL, delimiters);
     
-    int i = 0;
     for(int i =0; i <inputVar; i++)
     {
         char temp[25] = "";
@@ -203,10 +198,10 @@ Node* parseCreateInput(Node* head, char* line)
 void printLL(Node* head)
 {
     Node* ptr = head;
-    int counter = 0;
     while(ptr!=NULL)
     {
-        printf("%d ", ptr->data);
+        //printf("%s %d ---->", ptr->varName, ptr->data);
+        printf("%d ",ptr->data);
         ptr = ptr->next;
     }
     //printf("\n");
@@ -285,8 +280,8 @@ int main(int argc, char* argv[])
                 //EXPERIMENT
                 //printLL(outputLL);
                 //outputDetermination(outputName, outputLL, tempVarLL, outputRet);
-                printLL(inputLL);
-                printf("Curr Row : %d ---- %s = %d\n", currRow, outputName, outputRet);
+                //printLL(inputLL);
+                //printf("Curr Row : %d ---- %s = %d\n", currRow, outputName, outputRet);
                 
 
                 
@@ -307,16 +302,15 @@ int main(int argc, char* argv[])
             
             }
         }
-        //printLL(inputLL);
-        //printLL(outputLL);
+        printLL(inputLL);
+        printLL(outputLL);
         //printf("Curr Row : %d \n", currRow);
         //printLL(tempVarLL);
         freeMemory(tempVarLL);
         tempVarLL = NULL;
         printf("\n");
-        
-
-        
     }
+    freeMemory(inputLL);
+    freeMemory(outputLL);
     fclose(fp);
 }
